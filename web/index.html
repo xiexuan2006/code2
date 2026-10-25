@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Code Review Workflow · 多 Agent 协作 MVP</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo">CR</div>
+        <div class="brand-text">
+          <h1>Code Review Workflow</h1>
+          <p>3 个 Agent 协作 · 审查 / 修复循环 · 实时可视化</p>
+        </div>
+      </div>
+      <div class="top-right">
+        <button id="exportBtn" class="ghost" disabled>导出报告</button>
+        <span id="runId" class="runid">未运行</span>
+        <span id="statusChip" class="chip idle">待运行</span>
+      </div>
+    </header>
+
+    <section class="console">
+      <div class="fields">
+        <div class="field grow">
+          <label for="requirement">需求描述</label>
+          <textarea id="requirement" rows="2" spellcheck="false">实现一个用户查询服务：根据 id 在用户数组中查找并返回用户名 name，同时提供一个记录用户信息的日志方法。</textarea>
+        </div>
+        <div class="field grow">
+          <label for="code">初始代码（留空则由 CodingAgent 生成）</label>
+          <textarea id="code" rows="2" spellcheck="false" placeholder="留空：由 CodingAgent 生成含缺陷的初始实现"></textarea>
+        </div>
+      </div>
+      <div class="controls">
+        <div class="field compact">
+          <label for="sample">代码来源</label>
+          <select id="sample">
+            <option value="auto">自动生成（含缺陷模板）</option>
+            <option value="buggy">内置缺陷样例</option>
+            <option value="clean">正确代码样例</option>
+            <option value="vulnerable">安全风险样例</option>
+          </select>
+        </div>
+        <div class="field tiny">
+          <label for="maxRounds">最大修复轮次</label>
+          <input id="maxRounds" type="number" min="1" max="5" value="3" />
+        </div>
+        <label class="check"><input type="checkbox" id="fault" /> 注入一次审查故障</label>
+        <button id="runBtn" class="primary">▶ 运行 Workflow</button>
+      </div>
+    </section>
+
+    <main>
+      <section class="panel graph-panel">
+        <div class="panel-head">
+          <h2>Workflow 编排</h2>
+          <span class="hint">顺序 · 条件分支 · 循环 · 重试</span>
+        </div>
+        <div id="graph" class="graph">
+          <div class="empty small">运行后展示节点执行状态</div>
+        </div>
+        <div id="stats" class="stats"></div>
+        <div id="verdict" class="verdict"></div>
+        <div class="panel-head slim">
+          <h3>路由规则</h3>
+        </div>
+        <div id="routes" class="routes"></div>
+        <div class="panel-head slim">
+          <h3>运行历史</h3>
+          <span id="historyHint" class="hint">点击可回放</span>
+        </div>
+        <div id="history" class="history"></div>
+      </section>
+
+      <section class="panel detail-panel">
+        <div class="tabs" role="tablist">
+          <button class="tab active" data-tab="messages">消息流</button>
+          <button class="tab" data-tab="issues">审查问题</button>
+          <button class="tab" data-tab="code">代码版本</button>
+          <button class="tab" data-tab="logs">执行日志</button>
+        </div>
+        <div class="tab-body">
+          <div id="tab-messages" class="tab-pane active">
+            <div class="empty">运行后这里会显示 Agent 之间的消息。</div>
+          </div>
+          <div id="tab-issues" class="tab-pane">
+            <div class="empty">暂无审查结果。</div>
+          </div>
+          <div id="tab-code" class="tab-pane">
+            <div class="empty">暂无代码版本。</div>
+          </div>
+          <div id="tab-logs" class="tab-pane">
+            <div class="empty">暂无执行事件。</div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      本地离线运行（默认 mock LLM）· 运行记录写入 <code>runs/</code> · 提交物：README.md / DESIGN.md
+    </footer>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

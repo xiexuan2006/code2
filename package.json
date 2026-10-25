@@ -1,0 +1,26 @@
+{
+  "name": "code-review-workflow",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Homework 2 - 多 Agent 协作的代码审查 Workflow MVP（零第三方运行时依赖）",
+  "main": "src/cli.js",
+  "scripts": {
+    "start": "node src/cli.js run",
+    "demo": "node src/cli.js run",
+    "demo:buggy": "node src/cli.js run --code src/samples/buggy-user-service.js",
+    "demo:clean": "node src/cli.js run --code src/samples/clean-user-service.js",
+    "demo:fault": "node src/cli.js run --code src/samples/buggy-user-service.js --fault-inject reviewer",
+    "demo:parallel": "node src/cli.js run --workflow parallel-demo",
+    "demo:security": "node src/cli.js run --code src/samples/vulnerable-auth-service.js --max-rounds 2",
+    "demo:diff": "node src/cli.js run --diff",
+    "report": "node src/cli.js report",
+    "stats": "node src/cli.js stats",
+    "test": "node --test",
+    "ui": "node src/server.js",
+    "runs": "node src/cli.js runs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
